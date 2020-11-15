@@ -4,7 +4,14 @@ Command shortcuts I usually have in my shell profile. I'm always running these c
 These aliases are either custom made from myself or modifed/copied from others, as mentioned in [Acknowledgments](#Acknowledgments). 
 
 ## Setup
-Save contents of .profile into your `.profile` for bash or `.zprofile` for zsh
+Save contents of `profile` into your `~/.profile` for bash:
+```bash
+curl https://raw.githubusercontent.com/ibr0wse/shell_profile/main/profile >> ~/.profile
+```
+OR `~/.zprofile` for zsh:
+```bash
+curl https://raw.githubusercontent.com/ibr0wse/shell_profile/main/profile >> ~/.zprofile
+```
 
 ## Acknowledgments
 
