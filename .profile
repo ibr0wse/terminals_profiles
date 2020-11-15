@@ -5,7 +5,7 @@ helpalias(){
     echo "amprobe:              runs amass passively and saves to json, then does a quick probe for common http ports {DOMAIN}"
     echo "certgrab:             grab all known certs for domain and put into list"
     echo "certprobe:            runs httprobe on all the hosts from certspotter {DOMAIN}"
-    echo "flyover:		        run aquatone with large ports selection against a list of hosts {FILE}"
+    echo "flyover:              run aquatone with large ports selection against a list of hosts {FILE}"
     echo "ipinfo:               gets info about target {IP}"
     echo "gips:                 grep ips from a file, like amass's -src -ip output file or massdns's resolver output {FILE}"
   
