@@ -2,9 +2,8 @@ helpalias(){
     echo "findsubs:             get known subdomains (no brute force) and outputs to a file {DOMAIN}"
     echo "checkwildcard:        check if target domain allows brute force {DOMAIN}. If a number other than 0 is returned - brute force NOT possible."
     echo "probesubs:            run httprobe against a list of hosts {FILE}"
-    echo "amprobe:              runs amass passively and saves to json, then does a quick probe for common http ports {DOMAIN}"
+    echo "amprobe:              runs amass for reverse whois and passively for subdomains {DOMAIN}"
     echo "certgrab:             grab all known certs for domain and put into list"
-    echo "certprobe:            runs httprobe on all the hosts from certspotter {DOMAIN}"
     echo "flyover:              run aquatone with large ports selection against a list of hosts {FILE}"
     echo "ipinfo:               gets info about target {IP}"
     echo "gips:                 grep ips from a file, like amass's -src -ip output file or massdns's resolver output {FILE}"
@@ -33,19 +32,14 @@ probesubs(){ # run httprobe against a list of hosts {FILE}
     cat $1 | httprobe -c 5 | tee -a httprobed-$1
 }
 
-amprobe(){ # runs amass passively and saves to json, then does a quick probe for common http ports
-    amass enum --passive -d $1 -json $1.json
-    jq .name $1.json | sed "s/\"//g"| httprobe -c 60 | tee -a $1-domains_amass-passive-httprobed.txt
+ampassive(){ # runs amass for reverse whois and passively for subdomains
+    amass intel -whois -d $1 -r 8.8.8.8 -o ./intel_amass_$1.txt
+    amass enum --passive -d $1 -o passive_amass_$1
 }
 
 certgrab(){
     curl -s https://crt.sh/\?q\=\%.$1\&output\=json | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u > $1-hosts-crtsh.txt
     curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u > $1-hosts-certspotter.txt
-}
-
-certprobe(){ # runs httprobe on all the hosts from certspotter
-    curl -s https://crt.sh/\?q\=\%.$1\&output\=json | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u | httprobe | tee -a ./$1-crtsh_probed_all.txt
-    curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | httprobe | tee -a ./$1-certspotter_probed_all.txt
 }
 
 flyover() { #take active web server list from httprobe output and throw aquatone at it.
