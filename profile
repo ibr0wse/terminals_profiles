@@ -2,7 +2,7 @@ helpalias(){
     echo "findsubs:             get known subdomains (no brute force) and outputs to a file {DOMAIN}"
     echo "checkwildcard:        check if target domain allows brute force {DOMAIN}. If a number other than 0 is returned - brute force NOT possible."
     echo "probesubs:            run httprobe against a list of hosts {FILE}"
-    echo "amprobe:              runs amass for reverse whois and passively for subdomains {DOMAIN}"
+    echo "ampassive:            runs amass for reverse whois and passively for subdomains {DOMAIN}"
     echo "certgrab:             grab all known certs for domain and put into list"
     echo "flyover:              run aquatone with large ports selection against a list of hosts {FILE}"
     echo "ipinfo:               gets info about target {IP}"
