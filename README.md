@@ -20,3 +20,7 @@ Reload shell after running one of the above commands.
 * [@nahamsec](https://github.com/nahamsec)
 * Bug bounty recon profile
     * [recon_profile](https://github.com/nahamsec/recon_profile)
+#### Grep somefile.gnmap shortcuts
+* [@leonjza](https://github.com/leonjza)
+* A collection of awesome, grep-like commands for the nmap greppable output 
+    * [awesome-nmap-grep](https://github.com/leonjza/awesome-nmap-grep)
