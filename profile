@@ -8,6 +8,13 @@ helpalias(){
     echo "flyover:              run aquatone with large ports selection against a list of hosts {FILE}"
     echo "ipinfo:               gets info about target {IP}"
     echo "gips:                 grep ips from a file, like amass's -src -ip output file or massdns's resolver output {FILE}"
+    echo ""
+    echo "getwebservers:        parse webservers from Nmap scan {.nmap}"
+    echo "gports:               quickly get all the ports associated for each host {.gnmap}"
+    echo "topnames:             look at the top names found for each service {.gnmap}"
+    echo "topsids:              get the actual service identifiers {.gnmap}"
+    echo "countports:           quickly get number of ports open for each host {.gnmap}"
+    echo "awkports:             a pipe to look for ports associated with a specific service in grepable nmap output (ie: cat nmapresults.gnmap | grep weblogic | awkports)"
   
 }
 
@@ -51,4 +58,45 @@ ipinfo(){ # gets info about target IP
 
 gips(){ # grep ips from a file, like amass's -src -ip output file or something
     grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" $1
+}
+
+getwebservers(){ # parse webservers from Nmap scan (.nmap)
+    grep open $1 | grep -v "scan initiated" | tr -s " " | cut -d" " -f1-3 \
+    | grep "\(http\|sip\|ipp\|oem-agent\|soap\|snet-sensor-mgmt\|connect-proxy\|cpq-wbe m\|event-port\|analogx\|proxy-plus\|saphostctrl\|saphostctrls\|spss\|sun-ans werbook\|wsman\|wsmans\|wso2esb-console\|xmpp-bosh\)" \
+    | cut -d"/" -f 1 | sort -u
+}
+
+
+gports(){ # quickly get all the ports associated for each host {.gnmap}
+    egrep -v "^#|Status: Up" $1 | cut -d' ' -f2,4- | \
+    sed -n -e 's/Ignored.*//p'  | \
+    awk '{print "Host: " $1 " Ports: " NF-1; $1=""; for(i=2; i<=NF; i++) { a=a" "$i; }; split(a,s,","); for(e in s) { split(s[e],v,"/"); printf "%-8s %s/%-7s %s\n" , v[2], v[3], v[1], v[5]}; a="" }'
+}
+
+
+topnames(){ # look at the top names found for each service {.gnmap}
+    egrep -v "^#|Status: Up" $1 | cut -d ' ' -f4- | tr ',' '\n' | \
+    sed -e 's/^[ \t]*//' | awk -F '/' '{print $5}' | grep -v "^$" | sort | uniq -c \
+    | sort -k 1 -nr
+}
+
+topsids(){ # get the actual service identifiers {.gnmap}
+    egrep -v "^#|Status: Up" $1 | cut -d ' ' -f4- | tr ',' '\n' | \
+    sed -e 's/^[ \t]*//' | awk -F '/' '{print $7}' | grep -v "^$" | sort | uniq -c \
+    | sort -k 1 -nr
+}
+
+countports(){ # quickly get number of ports open for each host {.gnmap}
+    egrep -v "^#|Status: Up" $1 | cut -d' ' -f2,4- | \
+    sed -n -e 's/Ignored.*//p' | \
+    awk -F, '{split($0,a," "); printf "Host: %-20s Ports Open: %d\n" , a[1], NF}' \
+    | sort -k 5 -g
+}
+
+awkports(){ # a pipe to look for ports associated with a specific service (ie: cat nmapresults.gnmap | grep weblogic | awkports)
+   awk '{printf "%s\t", $2;
+      for (i=4;i<=NF;i++) {
+        split($i,a,"/");
+        if (a[2]=="open") printf ",%s",a[1];}
+      print ""}' | sed -e 's/,//'
 }
