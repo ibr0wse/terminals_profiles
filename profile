@@ -14,7 +14,8 @@ helpalias(){
     echo "topsids:              get the actual service identifiers {.gnmap}"
     echo "countports:           quickly get number of ports open for each host {.gnmap}"
     echo "awkports:             a pipe to look for ports associated with a specific service in grepable nmap output (ie: cat nmapresults.gnmap | grep weblogic | awkports)"
-  
+    echo "gsubnets:             parse list of IPs into subnets"
+
 }
 
 findsubs(){ # get known subdomains (no brute force)
@@ -91,4 +92,8 @@ awkports(){ # a pipe to look for ports associated with a specific service (ie: c
         split($i,a,"/");
         if (a[2]=="open") printf ",%s",a[1];}
       print ""}' | sed -e 's/,//'
+}
+
+gsubnets(){ # parse list of IPs into subnets
+    awk '{for(i=1;i<=NF;i++){split($i,a,".");cn=a[1]"."a[2]"."a[3]; if(cn != c){c=cn;printf("\n"c".0 ")};printf($i" ")}}END{printf("\n")}' $1 | cut -d " " -f1 | sort -u
 }
