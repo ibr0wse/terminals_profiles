@@ -5,6 +5,7 @@ helpalias(){
     echo "ampassive:            runs amass for reverse whois and passively for subdomains {DOMAIN}"
     echo "certgrab:             grab all known certs for domain and put into list"
     echo "flyover:              run aquatone with large ports selection against a list of hosts {FILE}"
+    echo "ffufitup:             takes a list of URLs (https://example.com/) and runs ffuf, outputs to its own associated domain-name directory {FILE}"
     echo "ipinfo:               gets info about target {IP}"
     echo "gips:                 grep ips from a file, like amass's -src -ip output file or massdns's resolver output {FILE}"
     echo ""
