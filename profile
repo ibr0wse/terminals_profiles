@@ -34,9 +34,9 @@ ffufitup(){ # takes a list of URLs and uses dirs to run ffuf. modify dirs() as n
 dirs(){ # ensure URLs end with trailing '/'                                                                                                  
         name=$(echo $1 | unfurl -u domains)
         x=$(date +%Y%m%d%H%M%S)                     
-        mkdir -p ~/work       
-        mkdir -p ~/work/$name                                                                                                                                                                                     
-        ffuf -w $FILES_LARGE -u $1FUZZ -D -e asp,aspx,cgi,cfml,CFM,htm,html,json,jsp,php,phtml,pl,py,sh,shtml,sql,txt,xml,xhtml,tar,tar.gz,tgz,war,zip,swp,src,jar,java,log,bin,js,db -t 10 -o ./$name/$name_$x.json
+        mkdir -p ./ffufs       
+        mkdir -p ./ffufs/$name                                                                                                                                                                                     
+        ffuf -w $FILES_LARGE -u $1FUZZ -D -e asp,aspx,cgi,cfml,CFM,htm,html,json,jsp,php,phtml,pl,py,sh,shtml,sql,txt,xml,xhtml,tar,tar.gz,tgz,war,zip,swp,src,jar,java,log,bin,js,db -t 10 -o ./ffufs/$name/$name_$x.json
 }
 
 findsubs(){ # get known subdomains (no brute force)
