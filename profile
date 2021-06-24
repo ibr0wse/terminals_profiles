@@ -18,6 +18,26 @@ helpalias(){
 
 }
 
+export SECLISTS="/CHANGE/THIS/TO/PATH/TO/SECLISTS"
+export BIG="$SECLISTS/Discovery/Web-Content/big.txt"
+export WEB="$SECLISTS/Discovery/Web-Content/"
+export DIRS_LARGE="$SECLISTS/Discovery/Web-Content/raft-large-directories.txt"
+export DIRS_SMALL="$SECLISTS/Discovery/Web-Content/raft-small-directories.txt"
+export FILES_LARGE="$SECLISTS/Discovery/Web-Content/raft-large-files.txt"
+export FILES_SMALL="$SECLISTS/Discovery/Web-Content/raft-small-files.txt"
+
+ffufitup(){ # takes a list of URLs and uses dirs to run ffuf. modify dirs() as necessary
+        for host in $(cat $1); do dirs $host;done | tee tmp
+}
+
+dirs(){ # ensure URLs end with trailing '/'                                                                                                  
+        name=$(echo $1 | unfurl -u domains)
+        x=$(date +%Y%m%d%H%M%S)                     
+        mkdir -p ~/work       
+        mkdir -p ~/work/$name                                                                                                                                                                                     
+        ffuf -w $FILES_LARGE -u $1FUZZ -D -e asp,aspx,cgi,cfml,CFM,htm,html,json,jsp,php,phtml,pl,py,sh,shtml,sql,txt,xml,xhtml,tar,tar.gz,tgz,war,zip,swp,src,jar,java,log,bin,js,db -t 10 -o ./$name/$name_$x.json
+}
+
 findsubs(){ # get known subdomains (no brute force)
     subfinder -d $1 -o ./subfinder_$1.txt
     amass enum -d $1 -o ./amass_subs_$1.txt
