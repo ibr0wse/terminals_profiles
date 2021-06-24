@@ -5,7 +5,7 @@ Commands I use to setup my terminal for ZSH and TMUX (syntax highlighting, tmux 
 Clicks script to quickly setup terminal look and feel with the adequate zsh & tmux plugins. (DO NOT RUN SCRIPT AS IS - just do one line at a time in the terminal)
 
 ## profile
-Command shortcuts I usually have in my shell profile. I'm always running these commands and wanted some quick aliases.. 
+Command shortcuts I usually have in my shell profile. I'm always running these commands and wanted some quick aliases. You must modify the SECLISTS variable to include the full path to SecLists.
 
 These aliases are either custom made from myself or modifed/copied from others, as mentioned in [Acknowledgments](#Acknowledgments). 
 
