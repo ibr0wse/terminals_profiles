@@ -61,7 +61,7 @@ ampassive(){ # runs amass for reverse whois and passively for subdomains
 
 certgrab(){
     curl -s https://crt.sh/\?q\=\%.$1\&output\=json | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u > $1-hosts-crtsh.txt
-    curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u > $1-hosts-certspotter.txt
+    curl -s https://certspotter.com/api/v1/issuances\?domain\=$1\&expand\=dns_names\&include_subdomains\=true | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u > $1-hosts-certspotter.txt
 }
 
 flyover() { #take active web server list from httprobe output and throw aquatone at it.
