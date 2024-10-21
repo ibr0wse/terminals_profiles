@@ -28,7 +28,8 @@ cat > ~/.tmux.conf <<EOF
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'tmux-plugins/tmux-logging'
-
+set -g @logging-path "$HOME/logs/%Y-%m-%d"
+set -g @logging-filename '%Y-%m-%d_%H-%M-%S_#{session_name}-#{window_index}-#{pane_index}-#{window_name}.log'
 set -g history-limit 50000
 set -g mouse on
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
